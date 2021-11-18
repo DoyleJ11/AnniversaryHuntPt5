@@ -1,1 +1,144 @@
-test
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>1 Year Anniversary Scavenger Hunt</title>
+    <!-- import aframe and then ar.js with image tracking / location based features -->
+    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+
+	  <style>
+	  .button {
+		background-color: #4CAF50;
+		border: none;
+		color: white;
+		padding: 7px;
+		text-align: center;
+		text-decoration: none;
+		display: inline-block;
+		font-size: 12px;
+		margin: 4px 2px;
+		cursor: pointer;
+		border-radius: 12px;
+		border: 2px solid rgba(9, 148, 28, 0.541);
+		box-shadow: o 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+		  }
+		  
+	  </style>
+	  
+<div style='position: fixed; top: 10px; width: 100%; text-align: center; z-index: 1;'>
+    <button class="button" id="btn1">Play Sound</button>
+    <button class="button" id="btn2">Mute</button>
+    <button class="button" id="btn3">Stop video</button>
+    <button class="button" id="btn4">Play Video</button>
+	  </div>
+	  
+   <script>
+    window.onload = function() {
+        AFRAME.registerComponent('videohandler', {
+            init: function () {
+                var marker = this.el;
+
+                this.vid = document.querySelector("#vid");
+
+                marker.addEventListener('markerFound', function () {
+                    this.vid.play();
+                }.bind(this));
+
+		marker.addEventListener('markerLost', function() {
+			this.vid.pause();
+			this.vid.currentTime = 0;
+		}.bind(this));
+            }
+        });
+    };
+	   
+</script> 
+    
+    <!-- style for the loader -->
+    <style>
+      .arjs-loader {
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-color: rgba(0, 0, 0, 0.8);
+        z-index: 9999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .arjs-loader div {
+        text-align: center;
+        font-size: 1.25em;
+        color: white;
+      }
+    </style>
+  </head>
+  
+  <body style="margin : 0px; overflow: hidden;">
+    <div class="arjs-loader">
+      <div>Loading, please wait...</div>
+    </div>
+
+    <!-- a-frame scene -->
+    <a-scene
+      vr-mode-ui="enabled: false;"
+      renderer="logarithmicDepthBuffer: true;"
+      embedded
+      arjs="trackingMethod: best; sourceType: webcam;debugUIEnabled: false;">
+      <!-- a-nft is the anchor that defines an Image Tracking entity -->
+      <!-- on 'url' use the path to the Image Descriptors created before. -->
+      <!-- the path should end with the name without the extension e.g. if file is trex.fset' the path should end with trex -->
+       <a-assets>
+            <video src="jacksonvid.mp4"
+                preload="auto" id="vid" response-type="arraybuffer" loop
+                crossorigin webkit-playsinline autoplay muted playsinline>
+            </video>
+        </a-assets>
+      <!--First Marker -->
+      <a-nft
+	videohandler
+        type="nft"
+        url="https://doylej11.github.io/AnniversaryHuntPt5/ann pic 5300"
+        smooth="true"
+        smoothCount="10"
+        smoothTolerance=".01"
+        smoothThreshold="5">
+          <!-- as a child of the a-nft entity, you can define the content to show. here's a GLTF model entity -->
+        
+        <a-video
+                src="#vid"
+                rotation='90 0 180'
+                width='360'
+                height='530'
+		scale='0.8 0.8 1'
+                >
+            </a-video>
+            <script>
+                document.getElementById("btn1").addEventListener("click", (e)=> {
+                var v = document.querySelector('#vid').muted=false;
+                })
+        
+                document.getElementById("btn2").addEventListener("click", (e)=> {
+                var v = document.querySelector('#vid').muted=true;
+                })
+        
+                document.getElementById("btn3").addEventListener("click", (e)=> {
+                var v = document.querySelector('#vid').pause();
+                })
+                document.getElementById("btn4").addEventListener("click", (e)=> {
+                var v = document.querySelector('#vid').play();
+                })
+        
+              </script>
+      </a-nft>
+	    
+      <!-- static camera that moves according to the device movemenents -->
+      <a-entity camera></a-entity>
+    </a-scene>
+  </body>
+</html>
